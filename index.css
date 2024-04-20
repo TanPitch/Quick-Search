@@ -47,6 +47,8 @@
   --light-bg-purple: #F6F3F9;
   --light-bg-pink: #FAF1F5;
   --light-bg-red: #FDEBEC;
+
+  --alert: #45160d;
 }
 
 ::selection {
@@ -54,7 +56,12 @@
   background: var(--h1);
 }
 
-h1,h2,h3,h4,h5,h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   padding: 0.5em 1em;
   background-color: var(--h1);
   border-radius: 6px;
@@ -65,7 +72,12 @@ a {
   text-decoration: none;
 }
 
-h1 a,h2 a,h3 a,h4 a,h5 a,h6 a {
+h1 a,
+h2 a,
+h3 a,
+h4 a,
+h5 a,
+h6 a {
   color: var(--h0);
   text-decoration: underline;
 }
@@ -315,6 +327,20 @@ body {
 .dose_row input {
   width: 15%;
 
+}
+
+.dose_detail {
+  width: 95%;
+  display: flex;
+  gap: 10px;
+  font-size: 14px;
+  padding: 0 0 8px;
+  color: var(--b4);
+}
+
+.dose_alert {
+  font-weight: 600;
+  color: var(--light-text-red);
 }
 
 .row_btn {
