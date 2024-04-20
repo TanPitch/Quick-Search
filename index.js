@@ -78,40 +78,63 @@ function goSection(el) {
 }
 
 // page, from search lists
-function selectSearch(el) {
+function selectSearch(i) {
   header.style.display = "flex";
   search_result.style.display = "none";
 
   // header and sections
-  document.querySelector("#page_detail_header span").textContent = data[0].name;
+  document.querySelector("#page_detail_header span").textContent = data[i].name;
   document.querySelector("#header_row").innerHTML = "&nbsp;";
-  data[0].section.forEach((el) => {
+  data[i].section.forEach((el) => {
     document.querySelector("#header_row").innerHTML += `<div onclick="goSection(this)">${el}</div>`;
   });
 
   // console.log(data[0].md);
-  loadMD(data[0].md, "text");
+  loadMD(data[i].md, "text");
 }
 
-// quick dose, from search lists
+// quick dose, from search lists TODO:
 function selectCalculate(el) {
   event.stopPropagation();
 
-  // console.log(data[el].dose);
   selectSearch(el);
   search_result.style.display = "none";
 
-  const dose = Number(data[el].dose.split("-")[0].split("*")[0]);
-  const dose_unit = data[el].dose.split("-")[0].split("*")[1];
-  const freq = data[0].dose.split("-")[1];
+  const result = {};
+  const element = data[el].dose.split("-");
+  element.forEach((element) => {
+    if (element.startsWith("#doseMax")) {
+      result.dose_max = element.split("*")[1] ? element.split("*")[1] : null;
+      result.dose_max_unit = element.split("*")[2] ? element.split("*")[2] : null;
+    } else if (element.startsWith("#dose")) {
+      const doseArray = element.split("*");
+      result.dose = doseArray[1];
+      result.dose_unit = doseArray[2];
+      result.dose_range = doseArray[3] && doseArray[4] && doseArray[5] ? [doseArray[3], doseArray[4]] : null;
+      result.dose_range_unit = doseArray[3] && doseArray[4] && doseArray[5] ? doseArray[5] : null;
+    } else if (element.startsWith("#freq")) {
+      result.freq = element.split("*")[1];
+      result.freq_range = element.split("*")[2] ? element.split("*")[2] : null;
+    } else if (element.startsWith("#amount")) {
+      const amountArray = element.split("*");
+      result.amount = amountArray[1];
+      result.amount_unit = [amountArray[2], amountArray[3]];
+    }
+  });
 
-  var amount = null;
-  var amount_unit = null;
-  if (data[el].dose.split("-")[2] != null) {
-    amount = Number(data[el].dose.split("-")[2].split("*")[0]);
-    amount_unit = data[el].dose.split("-")[2].split("*")[1];
-    openCalculator(dose, dose_unit, freq, amount, amount_unit.split("/"));
-  } else openCalculator(dose, dose_unit, freq);
+  openCalculator(
+    result.dose,
+    result.dose_unit,
+    result.freq,
+    result.amount,
+    result.amount_unit,
+    result.dose_range,
+    result.dose_range_unit,
+    result.dose_max,
+    result.dose_max_unit,
+    result.freq_range
+  );
+
 }
 
 function doSearch(input_value) {
@@ -187,22 +210,31 @@ btn_up.addEventListener("click", () => {
 // TODO: custom md code
 const renderer = {
   link(href, title, text) {
-    if (href.match(/@drug-[0-9]/g)) {
-      const dose = Number(href.split("-")[1].split("*")[0]);
-      const dose_unit = href.split("-")[1].split("*")[1];
-      const freq = href.split("-")[2];
+    if (href.match(/@drug-/g)) {
+      const result = {};
+      const el = href.split("-");
+      el.forEach((element) => {
+        if (element.startsWith("#doseMax")) {
+          result.dose_max = element.split("*")[1] ? element.split("*")[1] : null;
+          result.dose_max_unit = element.split("*")[2] ? element.split("*")[2] : null;
+        } else if (element.startsWith("#dose")) {
+          const doseArray = element.split("*");
+          result.dose = doseArray[1];
+          result.dose_unit = doseArray[2];
+          result.dose_range =
+            doseArray[3] && doseArray[4] && doseArray[5] ? [doseArray[3], doseArray[4]] : null;
+          result.dose_range_unit = doseArray[3] && doseArray[4] && doseArray[5] ? doseArray[5] : null;
+        } else if (element.startsWith("#freq")) {
+          result.freq = element.split("*")[1];
+          result.freq_range = element.split("*")[2] ? element.split("*")[2] : null;
+        } else if (element.startsWith("#amount")) {
+          const amountArray = element.split("*");
+          result.amount = amountArray[1];
+          result.amount_unit = [amountArray[2], amountArray[3]];
+        }
+      });
 
-      var amount = null;
-      var amount_unit = null;
-      if (href.split("-")[3] != null) {
-        amount = Number(href.split("-")[3].split("*")[0]);
-        amount_unit = href.split("-")[3].split("*")[1];
-        return `<span onclick="openCalculator(${dose}, '${dose_unit}', '${freq}', ${amount}, ['${
-          amount_unit.split("/")[0]
-        }','${amount_unit.split("/")[1]}'])" class="drug_dose">${text}</span>`;
-      }
-
-      return `<span onclick="openCalculator(${dose}, '${dose_unit}', '${freq}')" class="drug_dose">${text}</span>`;
+      return `<span onclick="openCalculator(${result.dose}, '${result.dose_unit}', '${result.freq}', ${result.amount}, '${result.amount_unit}', '${result.dose_range}', '${result.dose_range_unit}', ${result.dose_max}, '${result.dose_max_unit}', '${result.freq_range}')" class="drug_dose">${text}</span>`;
     }
 
     switch (href) {
@@ -282,6 +314,27 @@ function loadMD(input, type = "link") {
     if (el.textContent == "") el.remove();
   });
 
+  // merge table cell TODO:
+  // function mergeCells() {
+  //   var table = document.getElementById("myTable");
+  //   var rows = table.getElementsByTagName("tr");
+
+  //   for (var i = 0; i < rows.length; i++) {
+  //     var cells = rows[i].getElementsByTagName("td");
+  //     var previousText = "";
+
+  //     for (var j = 0; j < cells.length; j++) {
+  //       var currentText = cells[j].textContent.trim();
+  //       if (currentText !== "" && currentText === previousText) {
+  //         cells[j].setAttribute("colspan", parseInt(cells[j].getAttribute("colspan") || 1) + 1);
+  //         cells[j - 1].style.display = "none"; // Hide the previous cell
+  //       }
+  //       previousText = currentText;
+  //     }
+  //   }
+  // }
+  // mergeCells();
+
   // replace symbol TODO:
   const symbols_dict = {
     ">=": "≥",
@@ -356,7 +409,22 @@ const dose_amount_mcg = document.querySelectorAll(".row_btn span")[15];
 const dose_amount_ml = document.querySelectorAll(".row_btn span")[16];
 const dose_amount_l = document.querySelectorAll(".row_btn span")[17];
 
-function openCalculator(dose = 0, dose_unit = "mg", freq = "od", amount = 0, amount_unit = ["mg", "ml"]) {
+const dose_el_alert = document.querySelectorAll(".dose_detail div")[0];
+const dose_el_detail = document.querySelectorAll(".dose_detail div")[1];
+const freq_el_detail = document.querySelectorAll(".dose_detail")[1];
+
+function openCalculator(
+  dose = 0,
+  dose_unit = "mg",
+  freq = "od",
+  amount = 0,
+  amount_unit = undefined,
+  dose_range = "null",
+  dose_range_unit = "null",
+  dose_max = undefined,
+  dose_max_unit = null,
+  freq_range = "null"
+) {
   // reset value
   input_wt.value = "";
   input_dose.value = dose == 0 ? "" : Number(dose);
@@ -365,7 +433,12 @@ function openCalculator(dose = 0, dose_unit = "mg", freq = "od", amount = 0, amo
   dose_wt_unit = "kg";
   dose_dose_unit = dose_unit;
   dose_freq_unit = freq;
-  dose_amount_unit = amount_unit;
+  dose_amount_unit = amount_unit == undefined ? ["mg", "ml"] : amount_unit.split(",");
+
+  dose_range_array = dose_range == "null" || dose_range == null ? null : dose_range.split(",");
+  dose_range_unit = dose_range_unit == "null" || dose_range_unit == null ? null : dose_range_unit;
+  dose_max = dose_max == undefined ? null : dose_max;
+  dose_max_unit = dose_max == null ? null : dose_max_unit;
 
   dose_wt_kg.className = "selected";
   dose_wt_lb.className = "";
@@ -449,6 +522,13 @@ function openCalculator(dose = 0, dose_unit = "mg", freq = "od", amount = 0, amo
   document.querySelectorAll(".dose_result_row div")[0].textContent = "--";
   document.querySelectorAll(".dose_result_row div")[1].textContent = "--";
   document.querySelectorAll(".dose_result_row div")[2].textContent = "--";
+
+  dose_el_alert.textContent = dose_max == null ? "" : `* max dose ${dose_max} ${dose_max_unit}`;
+  dose_el_detail.textContent =
+    dose_range_array == null ? "" : `(${dose_range_array[0]} - ${dose_range_array[1]} ${dose_range_unit})`;
+  freq_el_detail.textContent = freq_range == null || freq_range.trim() == "null" ? "" : `* (${freq_range})`;
+  document.querySelectorAll(".dose_detail")[0].style.display =
+    dose_el_alert.textContent == "" && dose_el_detail.textContent == "" ? "none" : "flex";
 
   page_dose.style.transition = "transform .2s ease-out";
   page_dose.style.transform = "translateX(0)";
