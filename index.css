@@ -1,0 +1,473 @@
+:root {
+  --b0: #121212;
+  --b1: #191919;
+  --b2: #2a2a2a;
+  --b3: #696969;
+  --b4: #898989;
+  --b5: #fff;
+  --h0: #1a2129;
+  --h1: #456a8a;
+  --h2: #3e93e2;
+  --h3: #24303e;
+
+  --dark-text-grey: #979A9B;
+  --dark-text-brown: #937264;
+  --dark-text-orange: #FFA344;
+  --dark-text-yellow: #FFDC49;
+  --dark-text-green: #4DAB9A;
+  --dark-text-blue: #529CCA;
+  --dark-text-purple: #9A6DD7;
+  --dark-text-pink: #E255A1;
+  --dark-text-red: #FF7369;
+  --dark-bg-grey: #454B4E;
+  --dark-bg-brown: #594A3A;
+  --dark-bg-orange: #594A3A;
+  --dark-bg-yellow: #59563B;
+  --dark-bg-green: #354C4B;
+  --dark-bg-blue: #364954;
+  --dark-bg-purple: #443F57;
+  --dark-bg-pink: #533B4C;
+  --dark-bg-red: #594141;
+
+  --light-text-grey: #787774;
+  --light-text-brown: #9F6B53;
+  --light-text-orange: #D9730D;
+  --light-text-yellow: #CB912F;
+  --light-text-green: #448361;
+  --light-text-blue: #337EA9;
+  --light-text-purple: #9065B0;
+  --light-text-pink: #C14C8A;
+  --light-text-red: #D44C47;
+  --light-bg-grey: #F1F1EF;
+  --light-bg-brown: #F4EEEE;
+  --light-bg-orange: #FAEBDD;
+  --light-bg-yellow: #FBF3DB;
+  --light-bg-green: #EDF3EC;
+  --light-bg-blue: #E7F3F8;
+  --light-bg-purple: #F6F3F9;
+  --light-bg-pink: #FAF1F5;
+  --light-bg-red: #FDEBEC;
+}
+
+::selection {
+  /* color: var(--b5); */
+  background: var(--h1);
+}
+
+h1,h2,h3,h4,h5,h6 {
+  padding: 0.5em 1em;
+  background-color: var(--h1);
+  border-radius: 6px;
+}
+
+a {
+  color: var(--h2);
+  text-decoration: none;
+}
+
+h1 a,h2 a,h3 a,h4 a,h5 a,h6 a {
+  color: var(--h0);
+  text-decoration: underline;
+}
+
+code {
+  padding: 10px;
+  display: block;
+  background-color: var(--h0);
+  text-wrap: wrap;
+}
+
+input[type="number"] {
+  background-color: transparent;
+  outline: none;
+  padding: 6px;
+  border: 1px solid var(--b3);
+  border-radius: 6px;
+  color: var(--b5);
+}
+
+
+table {
+  border: 1px solid var(--b5);
+  border-collapse: collapse;
+  margin: 16px 0;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+td,
+th {
+  border: 1px solid var(--b5);
+  padding: 8px;
+}
+
+th {
+  padding-top: 12px;
+  padding-bottom: 12px;
+  text-align: left;
+  background-color: var(--h3);
+  color: var(--b5);
+}
+
+/* #region : obj */
+
+body {
+  padding: 0;
+  margin: 0;
+  color: var(--b5);
+  background-color: var(--b0);
+  font-family: "Bai Jamjuree", sans-serif;
+  font-weight: 300;
+  font-style: normal;
+  font-size: 16px;
+  user-select: none;
+}
+
+.search_bar {
+  position: fixed;
+  top: 0px;
+  left: 0px;
+  width: 100%;
+  padding: 10px 12px;
+  background-color: var(--b1);
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  box-sizing: border-box;
+}
+
+#page_detail_header {
+  background-color: var(--b0);
+  padding: 20px 0;
+  display: none;
+  flex-direction: column;
+  align-items: center;
+}
+
+.sticky {
+  position: fixed;
+  top: 0;
+  left: 20px;
+  padding: 30px 30px;
+  width: 100%;
+  transform: translateX(-20px);
+}
+
+#page_detail_header span {
+  font-size: 28px;
+  font-weight: 800;
+  padding: 0 0 10px;
+}
+
+#header_row {
+  padding-top: 10px;
+  display: flex;
+  overflow-x: auto;
+  gap: 8px;
+  white-space: nowrap;
+  max-width: 95%;
+}
+
+.sticky #header_row {
+  max-width: 85%;
+}
+
+#header_row>* {
+  padding: 4px 10px;
+  flex: 0 0 auto;
+  background-color: var(--b3);
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+#search_result {
+  position: fixed;
+  width: 100%;
+  top: 44px;
+  z-index: 10;
+  background-color: var(--b2);
+}
+
+.found {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2px;
+  padding: 8px 10px;
+  cursor: pointer;
+}
+
+.found:hover {
+  background-color: var(--h1);
+}
+
+.found div:first-child {
+  display: flex;
+  flex-direction: column;
+}
+
+.found div {
+  max-width: calc(100% - 44px);
+}
+
+.found div span:nth-child(2) {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.found span:first-child {
+  font-size: 20px;
+  font-weight: 800;
+}
+
+.found>span {
+  padding: 10px;
+  background-color: var(--b1);
+}
+
+.found>span:hover {
+  background-color: var(--h2);
+}
+
+#page_detail {
+  max-width: 100vw;
+  position: relative;
+  top: 44px;
+  padding: 0 20px 80px;
+  background-color: var(--b0);
+  color: var(--b5);
+  user-select: text;
+  overflow-x: hidden;
+}
+
+.search_bar>input {
+  background-color: transparent;
+  outline: none;
+  border: none;
+  color: var(--b5);
+  font-family: "Bai Jamjuree", sans-serif;
+  font-weight: 300;
+  font-style: normal;
+  font-size: 16px;
+}
+
+#btn_up {
+  border-radius: 6px;
+  padding: 10px;
+  position: fixed;
+  bottom: 2.5dvh;
+  right: 20px;
+  display: none;
+  color: var(--b4);
+  background-color: var(--b2);
+  cursor: pointer;
+}
+
+#btn_cal {
+  border-radius: 6px;
+  padding: 10px;
+  position: fixed;
+  bottom: 2.5dvh;
+  right: 20px;
+  color: var(--b4);
+  background-color: var(--b2);
+  cursor: pointer;
+  transition: transform .2s ease-out;
+}
+
+.drug_dose {
+  cursor: pointer;
+  color: var(--dark-text-green);
+  font-style: italic;
+}
+
+#page_dose {
+  background-color: var(--b0);
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transform: translateX(100%);
+}
+
+#page_dose>span:first-child {
+  padding: 20px;
+  font-size: 20px;
+  font-weight: 800;
+}
+
+.dose_row {
+  width: 95%;
+  display: flex;
+  align-items: center;
+  padding: 8px 0;
+}
+
+.dose_row>span:first-child {
+  width: 20%;
+}
+
+.dose_row input {
+  width: 15%;
+
+}
+
+.row_btn {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-left: auto;
+}
+
+.row_btn>*:not(label) {
+  padding: 4px 10px;
+  border: 1px solid var(--b4);
+  border-radius: 6px;
+  background-color: var(--b2);
+  cursor: pointer;
+}
+
+.row_btn>*.selected {
+  background-color: var(--h1);
+  border: 1px solid var(--h1);
+}
+
+.dose_result_row {
+  width: 95%;
+  display: flex;
+  font-weight: 800;
+  padding: 4px 0;
+}
+
+.dose_result_row>div {
+  font-size: 22px;
+  margin-left: auto;
+  color: var(--h2);
+}
+
+#btn_back {
+  background-color: var(--h1);
+  display: flex;
+  justify-content: center;
+  padding: 10px;
+  width: 90%;
+  cursor: pointer;
+  border-radius: 6px;
+}
+
+/* #endregion */
+
+/* #region : alignment */
+
+.hover-text:hover {
+  background-color: var(--h1);
+}
+
+.btn {
+  cursor: pointer;
+}
+
+.row {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+}
+
+/* #endregion */
+
+/* #region : color */
+
+.text-b0 {
+  color: var(--b0);
+}
+
+.text-b1 {
+  color: var(--b1);
+}
+
+.text-b2 {
+  color: var(--b2);
+}
+
+.text-b3 {
+  color: var(--b3);
+}
+
+.text-grey {
+  color: var(--dark-text-grey);
+}
+
+.text-brown {
+  color: var(--dark-text-brown);
+}
+
+.text-orange {
+  color: var(--dark-text-orange);
+}
+
+.text-yellow {
+  color: var(--dark-text-yellow);
+}
+
+.text-green {
+  color: var(--dark-text-green);
+}
+
+.text-blue {
+  color: var(--dark-text-blue);
+}
+
+.text-purple {
+  color: var(--dark-text-purple);
+}
+
+.text-pink {
+  color: var(--dark-text-pink);
+}
+
+.text-red {
+  color: var(--dark-text-red);
+}
+
+.bg-grey {
+  background-color: var(--dark-bg-grey);
+}
+
+.bg-brown {
+  background-color: var(--dark-bg-brown);
+}
+
+.bg-orange {
+  background-color: var(--dark-bg-orange);
+}
+
+.bg-yellow {
+  background-color: var(--dark-bg-yellow);
+}
+
+.bg-green {
+  background-color: var(--dark-bg-green);
+}
+
+.bg-blue {
+  background-color: var(--dark-bg-blue);
+}
+
+.bg-purple {
+  background-color: var(--dark-bg-purple);
+}
+
+.bg-pink {
+  background-color: var(--dark-bg-pink);
+}
+
+.bg-red {
+  background-color: var(--dark-bg-red);
+}
+
+/* #endregion */
