@@ -7,12 +7,12 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
   <meta name="application-name" content="Quick Search">
   <link rel="icon" href="favicon.ico" type="image/x-icon">
-  <link rel="apple-touch-icon" href="Icon.png">
-  <link rel="apple-touch-icon" sizes="76x76" href="Icon-72.png">
-  <link rel="apple-touch-icon" sizes="120x120" href="Icon@2x.png">
+  <link rel="apple-touch-icon" href="icon.png">
+  <link rel="apple-touch-icon" sizes="76x76" href="icon.png">
+  <link rel="apple-touch-icon" sizes="120x120" href="icon.png">
   <meta name="apple-mobile-web-app-title" content="Quick Search">
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <title>Quick Search</title>
 
   <link rel="stylesheet" href="index.css">
@@ -50,7 +50,7 @@
     <span>Calculator</span>
     <div class="dose_row">
       <span>Weight</span>
-      <input type="number" min="0">
+      <input type="number" pattern="\d*" min="0">
       <div class="row_btn">
         <span class="selected">kg</span>
         <span>lb</span>
@@ -58,7 +58,7 @@
     </div>
     <div class="dose_row">
       <span>Dosage</span>
-      <input type="number" min="0">
+      <input type="number" pattern="\d*" min="0">
       <div class="row_btn">
         <span class="selected">mg/kg</span>
         <span>g/kg</span>
@@ -66,8 +66,8 @@
       </div>
     </div>
     <div class="dose_detail">
-      <div class="dose_alert">* max dose 10 mcg/day</div>
-      <div>(10 - 20 mg/kg/dose)</div>
+      <div class="dose_alert"></div>
+      <div></div>
     </div>
     <div class="dose_row">
       <span>Frequency</span>
@@ -79,7 +79,7 @@
       </div>
     </div>
     <div class="dose_row" style="padding: 0 0 30px">
-      <div class="dose_detail" style="width: auto;">* (q4h - q8h)</div>
+      <div class="dose_detail" style="width: auto;"></div>
       <div class="row_btn">
         <span>q 4hr</span>
         <span>q 3hr</span>
@@ -89,7 +89,7 @@
     </div>
     <div class="dose_row">
       <span>Amount</span>
-      <input type="number" min="0" placeholder="0">
+      <input type="number" pattern="\d*" min="0" placeholder="0">
       <div class="row_btn">
         <span class="selected">mg</span>
         <span>g</span>
@@ -104,15 +104,19 @@
       </div>
     </div>
     <div class="dose_result_row">
-      <span>Per Single Dose</span>
+      <span>Single Dose</span>
       <div>--</div>
     </div>
     <div class="dose_result_row">
-      <span>Total Daily Dose</span>
+      <span>Daily Dose</span>
       <div>--</div>
     </div>
+    <div class="dose_result_row" style="display: none; padding: 0;">
+      <span></span>
+      <div style="color: var(--b4); font-size: 16px;">--</div>
+    </div>
     <div class="dose_result_row" style="padding: 0 0 50px">
-      <span>Per Single Liquid Dose</span>
+      <span>Single Liquid Dose</span>
       <div>--</div>
     </div>
     <div id="btn_back">Back</div>

@@ -134,7 +134,6 @@ function selectCalculate(el) {
     result.dose_max_unit,
     result.freq_range
   );
-
 }
 
 function doSearch(input_value) {
@@ -202,6 +201,7 @@ window.onscroll = () => {
 // scroll to top
 btn_up.addEventListener("click", () => {
   window.scrollTo({ top: 0, behavior: "smooth" });
+  document.querySelector("#top_div").scrollIntoView({ behavior: "smooth", block: "center", inline: "nearest" })
   searchBox.focus();
 });
 
@@ -294,7 +294,7 @@ marked.use({ renderer });
 
 // replace symbol TODO:
 function loadMD(input, type = "link") {
-  document.querySelector("#page_content").innerHTML = "";
+  document.querySelector("#page_content").innerHTML = "<div id='top_div'></div>";
 
   if (type == "link") {
     fetch(input)
@@ -306,7 +306,7 @@ function loadMD(input, type = "link") {
         console.error("Error fetching Markdown:", error);
       });
   } else if (type == "text") {
-    document.querySelector("#page_content").innerHTML = marked.parse(input);
+    document.querySelector("#page_content").innerHTML += marked.parse(input);
   }
 
   // clean blank table
@@ -522,6 +522,8 @@ function openCalculator(
   document.querySelectorAll(".dose_result_row div")[0].textContent = "--";
   document.querySelectorAll(".dose_result_row div")[1].textContent = "--";
   document.querySelectorAll(".dose_result_row div")[2].textContent = "--";
+
+  document.querySelectorAll(".dose_row")[1].style.backgroundColor = "";
 
   dose_el_alert.textContent = dose_max == null ? "" : `* max dose ${dose_max} ${dose_max_unit}`;
   dose_el_detail.textContent =
@@ -780,15 +782,49 @@ function doCalculate() {
       ? `${(wt * 1000).toLocaleString()} mcg`
       : `${wt.toLocaleString()} mg`;
   };
-  const perSingle = wt * dose;
-  const perDay = perSingle * freq;
+
+  const fixedNum = (num, i = 3) => {
+    return Math.round(num * Math.pow(10, i)) / Math.pow(10, i);
+  };
+
+  // overdose alert TODO:
+  const get_dose_unit = dose_el_detail.textContent.match(/[a-z]+/g)
+    ? dose_el_detail.textContent.match(/[a-z]+/g)[0]
+    : null;
+  if (get_dose_unit != null) {
+    const get_dose_range = dose_el_detail.textContent.match(/\d+\.*\d+/g).map((el) => {
+      switch (get_dose_unit) {
+        case "mg":
+          return Number(el);
+          break;
+        case "g":
+          return Number(el) * 1000;
+          break;
+        case "mcg":
+          return Number(el) / 1000;
+          break;
+      }
+    });
+
+    const alertColor = getComputedStyle(document.documentElement).getPropertyValue("--alert");
+    document.querySelectorAll(".dose_row")[1].style.backgroundColor =
+      dose < get_dose_range[0] || dose > get_dose_range[1] ? alertColor : "";
+  }
+
+  const perSingle = wt * dose; // single dose
+  const perDay = fixedNum(perSingle * freq); // daily dose
   const singleLiquid = dose_amount_unit[1] == "ml" ? perSingle / amount_wt : (1000 * perSingle) / amount_wt;
+  const dayKg = fixedNum(dose * freq); // daily dose per kg
 
   // show result
   document.querySelectorAll(".dose_result_row div")[0].textContent =
     perSingle == 0 ? "--" : wtConv(perSingle);
   document.querySelectorAll(".dose_result_row div")[1].textContent = perSingle == 0 ? "--" : wtConv(perDay);
   document.querySelectorAll(".dose_result_row div")[2].textContent =
+    fixedNum(dayKg, 2) % 1 == 0 ? `(${fixedNum(dayKg, 2)} ${dose_dose_unit}/kg)` : "";
+  document.querySelectorAll(".dose_result_row")[2].style.display =
+    document.querySelectorAll(".dose_result_row div")[2].textContent == "" ? "none" : "flex";
+  document.querySelectorAll(".dose_result_row div")[3].textContent =
     singleLiquid == Infinity || isNaN(singleLiquid)
       ? "--"
       : singleLiquid >= 1000
