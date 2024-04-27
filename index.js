@@ -289,6 +289,8 @@ const renderer = {
         return `<center>${text}</center>`;
       case "@li":
         return `<li>${text}`;
+      case "@li_sub":
+        return `<ul>${text}</ul>`;
 
       default:
         return `<a href="${href}">${text}</a>`;
