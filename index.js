@@ -280,6 +280,9 @@ const renderer = {
       case "@bg_red":
         return `<span class="bg-red">${text}</span>`;
 
+      case "@under":
+        return `<span class="text-under">${text}</span>`;
+
       case "@br":
         return `<br>`;
       case "@center":

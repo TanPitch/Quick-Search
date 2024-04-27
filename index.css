@@ -58,12 +58,17 @@
 
 h1,
 h2,
-h3,
+h3 {
+  padding: 0.5em 1em;
+  background-color: var(--h1);
+  border-radius: 6px;
+}
+
 h4,
 h5,
 h6 {
   padding: 0.5em 1em;
-  background-color: var(--h1);
+  background-color: var(--h0);
   border-radius: 6px;
 }
 
@@ -105,6 +110,7 @@ table {
   margin: 16px 0;
   margin-left: auto;
   margin-right: auto;
+  line-height: 1.5;
 }
 
 td,
@@ -407,6 +413,10 @@ body {
 /* #endregion */
 
 /* #region : color */
+
+.text-under {
+  text-decoration: underline;
+}
 
 .text-b0 {
   color: var(--b0);
