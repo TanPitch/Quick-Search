@@ -201,7 +201,9 @@ window.onscroll = () => {
 // scroll to top
 btn_up.addEventListener("click", () => {
   window.scrollTo({ top: 0, behavior: "smooth" });
-  document.querySelector("#top_div").scrollIntoView({ behavior: "smooth", block: "center", inline: "nearest" })
+  document
+    .querySelector("#top_div")
+    .scrollIntoView({ behavior: "smooth", block: "center", inline: "nearest" });
   searchBox.focus();
 });
 
@@ -340,8 +342,22 @@ function loadMD(input, type = "link") {
     ">=": "≥",
     "<=": "≤",
     "!=": "≠",
+    "#<-)#": "↶",
+    "#(->#": "↷",
+    "#(<-)#": "↺",
+    "#(->)#": "↻",
+    "->": "→",
+    "<-": "←",
+    "=>": "⇒",
+    "=<": "⇐",
+    "|->": "↦",
+    "<-|": "↤",
     "#up#": "↑",
     "#dn#": "↓",
+    "#updb": "⇑",
+    "#dndb": "⇓",
+    "#upbar#": "↥",
+    "#dnbar#": "↧",
     "#triup#": "▲",
     "#tridn#": "▼",
     "#rtlt#": "⇄",
