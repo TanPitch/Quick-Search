@@ -1,3 +1,9 @@
+/*
+
+TODO:
+
+*/
+
 // search box
 const searchBox = document.querySelector("#searchBox");
 const btn_clear = document.querySelector("#btn_clear");
@@ -169,7 +175,13 @@ function doSearch(input_value) {
   }
 }
 const textSearch = (el) => {
+  searchBox.value = el.textContent;
+  document.body.scrollTop = 0;
+  document.documentElement.scrollTop = 0;
   doSearch(el.textContent);
+};
+const textSection = (el) => {
+  goSection(el);
 };
 searchBox.addEventListener("click", () => {
   doSearch(searchBox.value);
@@ -198,12 +210,36 @@ window.onscroll = () => {
   }
 };
 
-// scroll to top
+// scroll to top TEST:
 btn_up.addEventListener("click", () => {
-  window.scrollTo({ top: 0, behavior: "smooth" });
-  document
-    .querySelector("#top_div")
-    .scrollIntoView({ behavior: "smooth", block: "center", inline: "nearest" });
+  const duration = 1000; // desired duration in milliseconds
+  const startScrollY = window.scrollY;
+  const startTime = performance.now();
+
+  function easeInOut(t) {
+    return t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t;
+  }
+
+  function scrollStepFunction(timestamp) {
+    const elapsed = timestamp - startTime;
+    const progress = elapsed / duration;
+    const easedProgress = easeInOut(progress);
+    const scrollStep = startScrollY * (1 - easedProgress);
+
+    if (progress < 1) {
+      window.scrollTo(0, scrollStep);
+      requestAnimationFrame(scrollStepFunction);
+    } else {
+      window.scrollTo(0, 0);
+    }
+  }
+
+  requestAnimationFrame(scrollStepFunction);
+
+  // window.scrollTo({ top: 0, behavior: "smooth" });
+  // document
+  //   .querySelector("#top_div")
+  //   .scrollIntoView({ behavior: "smooth", block: "center", inline: "nearest" });
   searchBox.focus();
 });
 
@@ -242,6 +278,9 @@ const renderer = {
     switch (href) {
       case "@find":
         return `<span class="btn hover-text" onclick="textSearch(this)">${text}</span>`;
+      case "@section":
+        return `<span class="btn hover-text" onclick="textSection(this)">${text}</span>`;
+
       case "@text_grey":
         return `<span class="text-grey">${text}</span>`;
       case "@text_brown":
@@ -320,27 +359,6 @@ function loadMD(input, type = "link") {
   document.querySelectorAll("th").forEach((el) => {
     if (el.textContent == "") el.remove();
   });
-
-  // merge table cell TODO:
-  // function mergeCells() {
-  //   var table = document.getElementById("myTable");
-  //   var rows = table.getElementsByTagName("tr");
-
-  //   for (var i = 0; i < rows.length; i++) {
-  //     var cells = rows[i].getElementsByTagName("td");
-  //     var previousText = "";
-
-  //     for (var j = 0; j < cells.length; j++) {
-  //       var currentText = cells[j].textContent.trim();
-  //       if (currentText !== "" && currentText === previousText) {
-  //         cells[j].setAttribute("colspan", parseInt(cells[j].getAttribute("colspan") || 1) + 1);
-  //         cells[j - 1].style.display = "none"; // Hide the previous cell
-  //       }
-  //       previousText = currentText;
-  //     }
-  //   }
-  // }
-  // mergeCells();
 
   // replace symbol TODO:
   const symbols_dict = {
