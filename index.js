@@ -410,6 +410,18 @@ function loadMD(input, type = "link") {
   }
 }
 
+// replace code for Mermaid
+document.addEventListener("DOMContentLoaded", () => {
+  const mermaidCodeElements = document.querySelectorAll("code.language-mermaid");
+  mermaidCodeElements.forEach((element) => {
+    const code = element.textContent;
+    const container = document.createElement("div");
+    container.className = "mermaid";
+    container.textContent = code;
+    element.replaceWith(container);
+  });
+});
+
 const mdfile =
   "https://gist.githubusercontent.com/rt2zz/e0a1d6ab2682d2c47746950b84c0b6ee/raw/83b8b4814c3417111b9b9bef86a552608506603e/markdown-sample.md";
 const localmd = "md.md";

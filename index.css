@@ -131,6 +131,11 @@ th {
   color: var(--b5);
 }
 
+div.mermaid {
+  display: flex;
+  justify-content: center;
+}
+
 /* #region : obj */
 
 body {
