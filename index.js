@@ -96,6 +96,7 @@ function selectSearch(i) {
   });
 
   // console.log(data[0].md);
+  btn_cal.style.display = data[i].dose.trim() == "" ? "none" : "flex";
   loadMD(data[i].md, "text");
 }
 
@@ -339,7 +340,7 @@ const renderer = {
 marked.use({ renderer });
 
 // replace symbol TODO:
-function loadMD(input, type = "link") {
+async function loadMD(input, type = "link") {
   document.querySelector("#page_content").innerHTML = "<div id='top_div'></div>";
 
   if (type == "link") {
@@ -408,6 +409,9 @@ function loadMD(input, type = "link") {
       }
     }
   }
+
+  largeImage();
+
 }
 
 // replace code for Mermaid
@@ -893,5 +897,159 @@ input_dose.addEventListener("keypress", (e) => {
     input_amount.focus();
   }
 });
+
+// #endregion
+
+// #region : large image
+
+function largeImage () {
+  const images = document.querySelectorAll("img");
+  const fullscreenContainer = document.getElementById("fullscreen-container");
+  const fullscreenImage = document.getElementById("fullscreen-image");
+  const closeBtn = document.getElementById("close-btn");
+  const zoomInBtn = document.getElementById("zoom-in");
+  const zoomOutBtn = document.getElementById("zoom-out");
+
+  let scale = 1;
+  let panX = 0;
+  let panY = 0;
+  let initialDistance = null;
+  let initialScale = 1;
+  let lastCenterX = 0;
+  let lastCenterY = 0;
+
+  images.forEach((image) => {
+    image.addEventListener("click", () => {
+      fullscreenImage.src = image.src;
+      fullscreenImage.onload = () => {
+        fullscreenContainer.style.display = "flex";
+        resetImage();
+      };
+    });
+  });
+
+  closeBtn.addEventListener("click", () => {
+    fullscreenContainer.style.display = "none";
+    resetImage();
+  });
+
+  zoomInBtn.addEventListener("click", () => {
+    zoomImage(1.1);
+  });
+
+  zoomOutBtn.addEventListener("click", () => {
+    zoomImage(0.9);
+  });
+
+  fullscreenImage.addEventListener("mousedown", startPan);
+  fullscreenImage.addEventListener("touchstart", startPan, { passive: false });
+
+  fullscreenImage.addEventListener("touchmove", handlePinch, { passive: false });
+
+  function startPan(e) {
+    e.preventDefault();
+    let startX = e.clientX || e.touches[0].clientX;
+    let startY = e.clientY || e.touches[0].clientY;
+
+    const moveHandler = (moveEvent) => {
+      let moveX = moveEvent.clientX || (moveEvent.touches && moveEvent.touches[0].clientX);
+      let moveY = moveEvent.clientY || (moveEvent.touches && moveEvent.touches[0].clientY);
+      panX += moveX - startX;
+      panY += moveY - startY;
+      startX = moveX;
+      startY = moveY;
+      constrainPan();
+      updateImageTransform();
+    };
+
+    const endHandler = () => {
+      document.removeEventListener("mousemove", moveHandler);
+      document.removeEventListener("mouseup", endHandler);
+      document.removeEventListener("touchmove", moveHandler);
+      document.removeEventListener("touchend", endHandler);
+    };
+
+    document.addEventListener("mousemove", moveHandler);
+    document.addEventListener("mouseup", endHandler);
+    document.addEventListener("touchmove", moveHandler, { passive: false });
+    document.addEventListener("touchend", endHandler);
+  }
+
+  function handlePinch(e) {
+    if (e.touches.length === 2) {
+      e.preventDefault();
+      const touch1 = e.touches[0];
+      const touch2 = e.touches[1];
+      const currentDistance = Math.hypot(touch1.clientX - touch2.clientX, touch1.clientY - touch2.clientY);
+      const centerX = (touch1.clientX + touch2.clientX) / 2;
+      const centerY = (touch1.clientY + touch2.clientY) / 2;
+
+      if (initialDistance === null) {
+        initialDistance = currentDistance;
+        initialScale = scale;
+        lastCenterX = centerX;
+        lastCenterY = centerY;
+      } else {
+        const scaleChange = currentDistance / initialDistance;
+        scale = initialScale * scaleChange;
+        const panChangeX = (centerX - lastCenterX) / scale;
+        const panChangeY = (centerY - lastCenterY) / scale;
+        panX += panChangeX;
+        panY += panChangeY;
+        lastCenterX = centerX;
+        lastCenterY = centerY;
+        constrainPan();
+        updateImageTransform();
+      }
+    }
+  }
+
+  function zoomImage(factor) {
+    const containerRect = fullscreenContainer.getBoundingClientRect();
+    const imageRect = fullscreenImage.getBoundingClientRect();
+
+    const centerX = containerRect.width / 2;
+    const centerY = containerRect.height / 2;
+
+    const offsetX = (centerX - imageRect.left) / scale;
+    const offsetY = (centerY - imageRect.top) / scale;
+
+    scale *= factor;
+
+    panX -= offsetX * (factor - 1);
+    panY -= offsetY * (factor - 1);
+
+    constrainPan();
+    updateImageTransform();
+  }
+
+  function constrainPan() {
+    const imageWidth = fullscreenImage.naturalWidth * scale;
+    const imageHeight = fullscreenImage.naturalHeight * scale;
+    const containerWidth = fullscreenContainer.clientWidth;
+    const containerHeight = fullscreenContainer.clientHeight;
+
+    const maxPanX = (imageWidth - containerWidth) / 2;
+    const maxPanY = (imageHeight - containerHeight) / 2;
+
+    panX = Math.min(Math.max(panX, -maxPanX), maxPanX);
+    panY = Math.min(Math.max(panY, -maxPanY), maxPanY);
+  }
+
+  function updateImageTransform() {
+    fullscreenImage.style.transform = `scale(${scale}) translate(${panX / scale}px, ${panY / scale}px)`;
+  }
+
+  function resetImage() {
+    scale = 1;
+    panX = 0;
+    panY = 0;
+    initialDistance = null;
+    initialScale = 1;
+    lastCenterX = 0;
+    lastCenterY = 0;
+    updateImageTransform();
+  }
+};
 
 // #endregion
