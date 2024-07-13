@@ -411,7 +411,6 @@ async function loadMD(input, type = "link") {
   }
 
   largeImage();
-
 }
 
 // replace code for Mermaid
@@ -902,13 +901,14 @@ input_dose.addEventListener("keypress", (e) => {
 
 // #region : large image
 
-function largeImage () {
+function largeImage() {
   const images = document.querySelectorAll("img");
   const fullscreenContainer = document.getElementById("fullscreen-container");
   const fullscreenImage = document.getElementById("fullscreen-image");
   const closeBtn = document.getElementById("close-btn");
   const zoomInBtn = document.getElementById("zoom-in");
   const zoomOutBtn = document.getElementById("zoom-out");
+  const zoomResetBtn = document.querySelector("#zoom-reset");
 
   let scale = 1;
   let panX = 0;
@@ -923,22 +923,34 @@ function largeImage () {
       fullscreenImage.src = image.src;
       fullscreenImage.onload = () => {
         fullscreenContainer.style.display = "flex";
-        resetImage();
+        setTimeout(() => {
+          fullscreenContainer.style.opacity = "1";
+          resetImage();
+        }, 10);
       };
     });
   });
 
   closeBtn.addEventListener("click", () => {
-    fullscreenContainer.style.display = "none";
-    resetImage();
+    fullscreenContainer.style.opacity = "0";
+    setTimeout(() => {
+      fullscreenContainer.style.display = "none";
+    }, 300);
   });
 
   zoomInBtn.addEventListener("click", () => {
+    fullscreenImage.style.transition = "all 0.2s";
     zoomImage(1.1);
   });
 
   zoomOutBtn.addEventListener("click", () => {
+    fullscreenImage.style.transition = "all 0.2s";
     zoomImage(0.9);
+  });
+
+  zoomResetBtn.addEventListener("click", () => {
+    fullscreenImage.style.transition = "";
+    resetImage();
   });
 
   fullscreenImage.addEventListener("mousedown", startPan);
@@ -946,7 +958,15 @@ function largeImage () {
 
   fullscreenImage.addEventListener("touchmove", handlePinch, { passive: false });
 
+  fullscreenContainer.addEventListener("wheel", (e) => {
+    e.preventDefault();
+    scale -= e.deltaY / 300;
+    scale = Math.max(scale, 1);
+    updateImageTransform();
+  });
+
   function startPan(e) {
+    fullscreenImage.style.transition = "";
     e.preventDefault();
     let startX = e.clientX || e.touches[0].clientX;
     let startY = e.clientY || e.touches[0].clientY;
@@ -1048,8 +1068,9 @@ function largeImage () {
     initialScale = 1;
     lastCenterX = 0;
     lastCenterY = 0;
+    fullscreenImage.style.transition = "";
     updateImageTransform();
   }
-};
+}
 
 // #endregion
