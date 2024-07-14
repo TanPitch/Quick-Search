@@ -143,6 +143,56 @@ function selectCalculate(el) {
   );
 }
 
+// style the table
+function tableStyle() {
+  document.querySelectorAll("table").forEach((table) => {
+    let alignToTop = false;
+    table.querySelectorAll("tbody td").forEach((td) => {
+      const lines = td.innerHTML.split(/<li>|<\/li>|\r\n|\r|\n/);
+      if (lines.length > 10) {
+        alignToTop = true;
+        return;
+      }
+    });
+
+    table.querySelectorAll("tbody td").forEach((td) => {
+      if (alignToTop) td.style.verticalAlign = "top";
+      else td.style.verticalAlign = "middle";
+    });
+
+    var tds = table.querySelectorAll("tbody td");
+    tds.forEach(function (td) {
+      td.style.whiteSpace = "nowrap";
+      var textWidth = td.offsetWidth;
+      if (textWidth <= 250) {
+        td.style.minWidth = textWidth + "px";
+      } else {
+        td.style.minWidth = "280px";
+        td.style.maxWidth = "400px";
+        td.style.whiteSpace = "wrap";
+      }
+    });
+    var tableWidth = table.offsetWidth;
+
+    if (tableWidth > 300) {
+      table.style.width = "auto";
+
+      // Create a new div wrapper
+      var divWrapper = document.createElement("div");
+      divWrapper.style.width = "100%";
+      divWrapper.style.overflowX = "auto";
+      divWrapper.appendChild(table.cloneNode(true)); // Clone the table and append to the wrapper
+      table.parentNode.replaceChild(divWrapper, table); // Replace the original container with the wrapper
+    } else {
+      tds.forEach((td) => {
+        td.style.maxWidth = "none";
+      });
+      table.style.width = "auto";
+      table.style.overflowX = "hidden";
+    }
+  });
+}
+
 function doSearch(input_value) {
   if (data.length <= 0) return;
 
@@ -410,6 +460,7 @@ async function loadMD(input, type = "link") {
     }
   }
 
+  tableStyle();
   largeImage();
 }
 
@@ -917,6 +968,8 @@ function largeImage() {
   let initialScale = 1;
   let lastCenterX = 0;
   let lastCenterY = 0;
+  let startPanX = 0;
+  let startPanY = 0;
 
   images.forEach((image) => {
     image.addEventListener("click", () => {
@@ -968,16 +1021,16 @@ function largeImage() {
   function startPan(e) {
     fullscreenImage.style.transition = "";
     e.preventDefault();
+    startPanX = panX;
+    startPanY = panY;
     let startX = e.clientX || e.touches[0].clientX;
     let startY = e.clientY || e.touches[0].clientY;
 
     const moveHandler = (moveEvent) => {
       let moveX = moveEvent.clientX || (moveEvent.touches && moveEvent.touches[0].clientX);
       let moveY = moveEvent.clientY || (moveEvent.touches && moveEvent.touches[0].clientY);
-      panX += moveX - startX;
-      panY += moveY - startY;
-      startX = moveX;
-      startY = moveY;
+      panX = startPanX + moveX - startX;
+      panY = startPanY + moveY - startY;
       constrainPan();
       updateImageTransform();
     };
@@ -1068,9 +1121,66 @@ function largeImage() {
     initialScale = 1;
     lastCenterX = 0;
     lastCenterY = 0;
+    startPanX = 0;
+    startPanY = 0;
     fullscreenImage.style.transition = "";
     updateImageTransform();
   }
 }
+
+// #endregion
+
+// #region : color theme
+
+const btn_easter = document.querySelector("#btn_easter");
+const colorTheme = [
+  {
+    name: "dark",
+    b0: "#121212",
+    b1: "#191919",
+    b2: "#2a2a2a",
+    b3: "#696969",
+    b4: "#898989",
+    b5: "#fff",
+    h0: "#1a2129",
+    h1: "#456a8a",
+    h2: "#3e93e2",
+    h3: "#24303e",
+  },
+  {
+    name: "light",
+    b0: "#f1faee",
+    b1: "#c3dadb",
+    b2: "#696969",
+    b3: "#c3dadb",
+    b4: "#191919",
+    b5: "#121212",
+    h0: "#c3dadb",
+    h1: "#a8dadc",
+    h2: "#e63946",
+    h3: "#becbcc",
+  },
+];
+
+let currentThemeIndex = 0;
+btn_easter.addEventListener("click", () => {
+  currentThemeIndex = (currentThemeIndex + 1) % colorTheme.length;
+  applyTheme(colorTheme[currentThemeIndex]);
+});
+
+function applyTheme(theme) {
+  document.documentElement.style.setProperty("--b0", theme.b0);
+  document.documentElement.style.setProperty("--b1", theme.b1);
+  document.documentElement.style.setProperty("--b2", theme.b2);
+  document.documentElement.style.setProperty("--b3", theme.b3);
+  document.documentElement.style.setProperty("--b4", theme.b4);
+  document.documentElement.style.setProperty("--b5", theme.b5);
+  document.documentElement.style.setProperty("--h0", theme.h0);
+  document.documentElement.style.setProperty("--h1", theme.h1);
+  document.documentElement.style.setProperty("--h2", theme.h2);
+  document.documentElement.style.setProperty("--h3", theme.h3);
+}
+
+applyTheme(colorTheme[currentThemeIndex]);
 
 // #endregion

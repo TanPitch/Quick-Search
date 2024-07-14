@@ -56,6 +56,10 @@
   background: var(--h1);
 }
 
+ul {
+  margin: 0;
+}
+
 h1,
 h2,
 h3 {
@@ -107,6 +111,9 @@ input[type="number"] {
   color: var(--b5);
 }
 
+tbody td {
+  text-align: left;
+}
 
 table {
   border: 1px solid var(--b5);
@@ -115,6 +122,8 @@ table {
   margin-left: auto;
   margin-right: auto;
   line-height: 1.5;
+  table-layout: fixed;
+  width: 100%; /* Initial width */
 }
 
 td,
