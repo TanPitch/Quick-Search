@@ -1,0 +1,41 @@
+.txt-s {
+    font-size: smaller;
+}
+
+.pad-m {
+    padding: var(--pad-m);
+}
+
+.pad-side-m {
+    padding-left: var(--gap-m);
+    padding-right: var(--gap-m);
+}
+
+.row {
+    display: flex;
+    gap: var(--gap-m);
+    align-items: center;
+}
+
+.row.top {
+    align-items: flex-start;
+}
+
+.col {
+    display: flex;
+    flex-direction: column;
+}
+
+.right {
+    margin-left: auto;
+}
+
+.width-s {
+    width: var(--width-s);
+}
+
+.fixed-top {
+    position: fixed;
+    top: 0;
+    padding-top: var(--gap-xl);
+}

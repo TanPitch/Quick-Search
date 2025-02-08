@@ -1,0 +1,44 @@
+#page_loader {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100dvw;
+  height: 100dvh;
+  display: none;
+  justify-content: center;
+  align-items: center;
+  background: var(--loader-bg);
+  backdrop-filter: blur(2px);
+  z-index: 999;
+}
+
+.loader {
+  width: 50px;
+  aspect-ratio: 1;
+  display: grid;
+  border-radius: 50%;
+  background: var(--loader-ring);
+  background-repeat: no-repeat;
+  animation: l23 1s infinite steps(12);
+}
+
+.loader::before,
+.loader::after {
+  content: "";
+  grid-area: 1/1;
+  border-radius: 50%;
+  background: inherit;
+  opacity: 0.915;
+  transform: rotate(30deg);
+}
+
+.loader::after {
+  opacity: 0.83;
+  transform: rotate(60deg);
+}
+
+@keyframes l23 {
+  100% {
+    transform: rotate(1turn)
+  }
+}

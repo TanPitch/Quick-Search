@@ -1,146 +1,225 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="dark">
 
 <head>
-  <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black">
-  <meta name="application-name" content="Quick Search">
-  <meta name="theme-color" content="#121212">
-  <link rel="icon" href="favicon.ico" type="image/x-icon">
-  <link rel="apple-touch-icon" href="icon.png">
-  <link rel="apple-touch-icon" sizes="76x76" href="icon.png">
-  <link rel="apple-touch-icon" sizes="120x120" href="icon.png">
-  <meta name="apple-mobile-web-app-title" content="Quick Search">
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <title>Quick Search</title>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="application-name" content="Quick Search">
+    <meta name="theme-color" content="#121212">
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
+    <link rel="apple-touch-icon" href="icon.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="icon.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="icon.png">
+    <meta name="apple-mobile-web-app-title" content="Quick Search">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>Quick Search</title>
 
-  <link rel="stylesheet" href="index.css">
-  <link
-    href="https://fonts.googleapis.com/css2?family=Bai+Jamjuree:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;1,200;1,300;1,400;1,500;1,600;1,700&display=swap"
-    rel="stylesheet">
-  <link rel="stylesheet"
-    href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
+    <link rel="stylesheet" href="index.css">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Bai+Jamjuree:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;1,200;1,300;1,400;1,500;1,600;1,700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
 
-  <script src="/lib/marked.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/12.0.2/marked.min.js"></script>
-  <script async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="/lib/marked.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/12.0.2/marked.min.js"></script>
+    <script async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 
-  <script type="module">
-    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
-    mermaid.initialize({ startOnLoad: true, theme: 'dark' });
-  </script>
+    <script type="module">
+        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+        mermaid.initialize({ startOnLoad: true, theme: 'dark' });
+    </script>
 </head>
 
 <body>
-  <div class="search_bar">
-    <span id="btn_easter" class="material-symbols-outlined">search</span>
-    <input id="searchBox" placeholder="Search" style="width: 100%;">
-    <span id="btn_clear" class="material-symbols-outlined text-b3 btn" style="margin-left: auto;">close</span>
-  </div>
+    <div class="search_bar">
+        <span id="btn_easter" class="material-symbols-outlined">search</span>
+        <input id="searchBox" placeholder="Search" style="width: 100%;">
+        <span id="btn_clear" class="material-symbols-outlined text-b3 btn" style="margin-left: auto;">close</span>
+    </div>
 
-  <div id="search_result"></div>
+    <div id="search_result"></div>
+    <div id="search_custom">
+        <div class="btn">Quick search</div>
+        <div class="btn">Full search</div>
+    </div>
 
-  <div id="page_detail">
-    <div id="page_detail_header">
-      <span>Header</span>
-      <div id="header_row"></div>
+    <div id="page_detail" style="display: none;">
+        <div id="page_detail_header">
+            <span>Header</span>
+            <div id="header_row"></div>
+        </div>
+        <div id="page_content"></div>
     </div>
-    <div id="page_content"></div>
-  </div>
 
-  <div id="btn_up"><span class="material-symbols-outlined">arrow_upward</span></div>
-  <div id="btn_cal"><span class="material-symbols-outlined">function</span></div>
+    <div id="page_mdcal">
+        <div class="title">
+            <div class="title_head"></div>
+            <div class="title_sub"></div>
+        </div>
+        <div class="instruct">
+            <div class="instruct_head"></div>
+            <div class="instruct_sub"></div>
+        </div>
 
-  <div id="page_dose">
-    <span>Calculator</span>
-    <div class="dose_row">
-      <span>Weight</span>
-      <input type="number" pattern="\d*" min="0">
-      <div class="row_btn">
-        <span class="selected">kg</span>
-        <span>lb</span>
-      </div>
-    </div>
-    <div class="dose_row">
-      <span>Dosage</span>
-      <input type="number" pattern="\d*" min="0">
-      <div class="row_btn">
-        <span class="selected">mg/kg</span>
-        <span>g/kg</span>
-        <span>mcg/kg</span>
-      </div>
-    </div>
-    <div class="dose_detail">
-      <div class="dose_alert"></div>
-      <div></div>
-    </div>
-    <div class="dose_row">
-      <span>Frequency</span>
-      <div class="row_btn">
-        <span class="selected">OD</span>
-        <span>BID</span>
-        <span>TID</span>
-        <span>QID</span>
-      </div>
-    </div>
-    <div class="dose_row" style="padding: 0 0 30px">
-      <div class="dose_detail" style="width: auto;"></div>
-      <div class="row_btn">
-        <span>q 4hr</span>
-        <span>q 3hr</span>
-        <span>q 2hr</span>
-        <span>q 1hr</span>
-      </div>
-    </div>
-    <div class="dose_row">
-      <span>Amount</span>
-      <input type="number" pattern="\d*" min="0" placeholder="0">
-      <div class="row_btn">
-        <span class="selected">mg</span>
-        <span>g</span>
-        <span>mcg</span>
-      </div>
-    </div>
-    <div class="dose_row" style="padding: 0 0 50px">
-      <div class="row_btn">
-        <label>/</label>
-        <span class="selected">mL</span>
-        <span>L</span>
-      </div>
-    </div>
-    <div class="dose_result_row">
-      <span>Single Dose</span>
-      <div>--</div>
-    </div>
-    <div class="dose_result_row">
-      <span>Daily Dose</span>
-      <div>--</div>
-    </div>
-    <div class="dose_result_row" style="display: none; padding: 0;">
-      <span></span>
-      <div style="color: var(--b4); font-size: 16px;">--</div>
-    </div>
-    <div class="dose_result_row" style="padding: 0 0 50px">
-      <span>Single Liquid Dose</span>
-      <div>--</div>
-    </div>
-    <div id="btn_back">Back</div>
-  </div>
+        <div class="mdcal_body"></div>
+        <div class="result">
+            <div>
+                <div class="head">Result:</div>
+                Please fill out required fields.
+            </div>
+        </div>
 
-  <!-- Fullscreen container -->
-  <div id="fullscreen-container">
-    <div id="controls">
-      <div id="zoom-in"><span class="material-symbols-outlined">add</span></div>
-      <div id="zoom-out"><span class="material-symbols-outlined">remove</span></div>
-      <div id="zoom-reset"><span class="material-symbols-outlined">replay</span></div>
-      <div id="close-btn"><span class="material-symbols-outlined">close</span></div>
-    </div>
-    <img id="fullscreen-image" src="" alt="Fullscreen Image">
-  </div>
+        <div class="next">
+            <div class="head">Next step</div>
+            <div class="body"></div>
+        </div>
 
-  <script src="index.js"></script>
+        <div class="detail">
+            <div class="row">
+                <span>Detail</span>
+                <span class="material-symbols-outlined right">keyboard_arrow_down</span>
+
+            </div>
+            <div class="fuse_btn" style="margin-top: 10px;">
+                <input type="radio" id="detail_1" value="when" name="detail" checked />
+                <label for="detail_1">When</label>
+
+                <input type="radio" id="detail_2" value="pitfalls" name="detail" />
+                <label for="detail_2">Pitfalls</label>
+
+                <input type="radio" id="detail_3" value="why" name="detail" />
+                <label for="detail_3">Why</label>
+
+                <input type="radio" id="detail_4" value="evidence" name="detail" />
+                <label for="detail_4">Evidence</label>
+            </div>
+            <div class="body"></div>
+        </div>
+    </div>
+
+    <div id="btn_scrollTop"><span class="material-symbols-outlined">arrow_upward</span></div>
+    <div id="btn_calculator"><span class="material-symbols-outlined">function</span></div>
+
+    <div id="page_dose">
+        <div class="title">
+            <div class="title_head">Calculator</div>
+            <div class="title_sub"></div>
+        </div>
+        <div class="instruct"></div>
+
+        <div class="row">
+            <span>Weight</span>
+            <input type="number" pattern="\d*" min="0">
+            <div class="row_btn right">
+                <input type="radio" id="dose_wt_g" value="g" name="dose_wt" />
+                <label for="dose_wt_g">g</label>
+                <input type="radio" id="dose_wt_kg" value="kg" name="dose_wt" checked />
+                <label for="dose_wt_kg">kg</label>
+                <input type="radio" id="dose_wt_lb" value="lb" name="dose_wt" />
+                <label for="dose_wt_lb">lb</label>
+            </div>
+        </div>
+        <div class="row">
+            <span>Dosage</span>
+            <input type="number" pattern="\d*" min="0">
+            <div class="row_btn right">
+                <input type="radio" id="dose_dose_mg" value="mg" name="dose_dose" checked />
+                <label for="dose_dose_mg">mg/kg</label>
+                <input type="radio" id="dose_dose_g" value="g" name="dose_dose" />
+                <label for="dose_dose_g">g/kg</label>
+                <input type="radio" id="dose_dose_mcg" value="mcg" name="dose_dose" />
+                <label for="dose_dose_mcg">mcg/kg</label>
+            </div>
+        </div>
+
+        <div class="row dose_alert">
+            <div>alert</div>
+            <div>Lorem ipsum, dolor sit amet consectetur adipisicing elit.</div>
+        </div>
+
+        <div class="row top" style="margin-top: var(--gap-xl);">
+            <span>Frequency</span>
+            <div class="row_btn right">
+                <input type="radio" id="dose_freq_od" value="od" name="dose_freq" checked />
+                <label for="dose_freq_od">OD</label>
+                <input type="radio" id="dose_freq_bid" value="bid" name="dose_freq" />
+                <label for="dose_freq_bid">BID</label>
+                <input type="radio" id="dose_freq_tid" value="tid" name="dose_freq" />
+                <label for="dose_freq_tid">TID</label>
+                <input type="radio" id="dose_freq_qid" value="qid" name="dose_freq" />
+                <label for="dose_freq_qid">QID</label>
+                <label class="break"></label>
+                <input type="radio" id="dose_freq_q4" value="q4" name="dose_freq" />
+                <label for="dose_freq_q4">q 4 hr</label>
+                <input type="radio" id="dose_freq_q3" value="q3" name="dose_freq" />
+                <label for="dose_freq_q3">q 3 hr</label>
+                <input type="radio" id="dose_freq_q2" value="q2" name="dose_freq" />
+                <label for="dose_freq_q2">q 2 hr</label>
+                <input type="radio" id="dose_freq_q1" value="q1" name="dose_freq" />
+                <label for="dose_freq_q1">q 1 hr</label>
+            </div>
+        </div>
+        <div class="row top" style="padding-top: 6px;">
+            <span>Amount</span>
+            <input type="number" pattern="\d*" min="0">
+            <div class="row_btn right">
+                <input type="radio" id="dose_amount1_mg" value="mg" name="dose_amount1" checked />
+                <label for="dose_amount1_mg">mg</label>
+                <input type="radio" id="dose_amount1_g" value="g" name="dose_amount1" />
+                <label for="dose_amount1_g">g</label>
+                <input type="radio" id="dose_amount1_mcg" value="mcg" name="dose_amount1" />
+                <label for="dose_amount1_mcg">mcg</label>
+
+                <label class="break"></label>
+
+                <label>/</label>
+                <input type="radio" id="dose_amount2_ml" value="ml" name="dose_amount2" checked />
+                <label for="dose_amount2_ml">mL</label>
+                <input type="radio" id="dose_amount2_l" value="l" name="dose_amount2" />
+                <label for="dose_amount2_l">L</label>
+            </div>
+        </div>
+
+        <div class="result">
+            <div class="row">
+                <span>Single Dose</span>
+                <div class="right">1 mg</div>
+            </div>
+            <div class="row">
+                <span>Daily Dose</span>
+                <div class="right">1 mg</div>
+            </div>
+            <div class="row">
+                <div class="right">(1 mg/kg)</div>
+            </div>
+            <div class="row">
+                <span>Single Liquid Dose</span>
+                <div class="right">1 mL</div>
+            </div>
+        </div>
+
+        <div id="btn_back" class="btn">Back</div>
+    </div>
+
+    <!-- Fullscreen container -->
+    <div id="fullscreen-container">
+        <div id="controls">
+            <div id="zoom-in"><span class="material-symbols-outlined">add</span></div>
+            <div id="zoom-out"><span class="material-symbols-outlined">remove</span></div>
+            <div id="zoom-reset"><span class="material-symbols-outlined">replay</span></div>
+            <div id="close-btn"><span class="material-symbols-outlined">close</span></div>
+        </div>
+        <img id="fullscreen-image" src="" alt="Fullscreen Image">
+    </div>
+
+    <div id="page_loader">
+        <div class="loader"></div>
+    </div>
+
+    <script type="module" src="index.js"></script>
 </body>
 
 </html>

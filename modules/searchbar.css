@@ -1,0 +1,95 @@
+.search_bar {
+  position: fixed;
+  top: 0px;
+  left: 0px;
+  width: 100%;
+  padding: var(--pad-l);
+  background: var(--searchbar-bg);
+  display: flex;
+  gap: var(--gap-xl);
+  align-items: center;
+  box-sizing: border-box;
+
+  input {
+    background: transparent !important;
+    outline: none;
+    border: none;
+    color: var(--txt-base);
+    font-family: "Bai Jamjuree", sans-serif;
+    font-weight: 300;
+    font-style: normal;
+    font-size: 16px;
+  }
+
+  #btn_clear {
+    color: var(--txt-grey);
+  }
+}
+
+#search_result {
+  position: fixed;
+  width: 100%;
+  top: var(--page-top);
+  z-index: 10;
+  background: var(--search-bg);
+}
+
+.found {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--pad-m);
+  cursor: pointer;
+
+  div:first-child {
+    display: flex;
+    flex-direction: column;
+  }
+
+  div {
+    max-width: calc(100% - var(--page-top));
+  }
+
+  div span:nth-child(2) {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  span:first-child {
+    font-size: 20px;
+    font-weight: 800;
+  }
+
+  >span {
+    padding: var(--gap-xl);
+    background: var(--btn-selected);
+    border-radius: var(--radius-m);
+  }
+
+  >span:hover {
+    background: var(--btn-hovered);
+  }
+}
+
+.found:hover {
+  background: var(--search-hovered);
+}
+
+#search_custom {
+  position: absolute;
+  top: calc(var(--page-top) + var(--gap-m));
+  left: var(--gap-m);
+  width: 150px;
+  display: none;
+  flex-direction: column;
+  background-color: var(--searchbar-bg);
+  color: var(--txt-base);
+  border-radius: var(--radius-m);
+  overflow: hidden;
+  z-index: 999;
+}
+
+#search_custom>* {
+  padding: var(--pad-m);
+}

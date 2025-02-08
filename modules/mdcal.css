@@ -1,0 +1,140 @@
+#page_mdcal {
+  max-width: 100dvw;
+  position: relative;
+  top: var(--page-top);
+  padding: var(--page-pad);
+  background: var(--bg-base);
+  color: var(--txt-base);
+  user-select: none;
+  overflow-x: hidden;
+  display: none;
+  flex-direction: column;
+  gap: var(--gap-m);
+  z-index: 5;
+
+  .mdcal_body {
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap-m);
+  }
+
+  .title {
+    background: var(--b0);
+    display: flex;
+    flex-direction: column;
+    padding: var(--title-pad);
+
+    .title_head {
+      font-size: var(--title-font-size);
+      font-weight: var(--title-font-weight);
+      background: var(--bg-base);
+    }
+
+    .title_sub {
+      font-size: smaller;
+    }
+  }
+
+  .text {
+    background: var(--bg-g1);
+    font-size: smaller;
+    padding: var(--gap-xl);
+    border-radius: var(--radius-m);
+  }
+
+  .instruct {
+    background: var(--bg-h1);
+    font-size: smaller;
+    padding: var(--gap-xl);
+    border-radius: var(--radius-m);
+
+    .instruct_head {
+      font-size: normal;
+      font-weight: bold;
+      padding-bottom: var(--gap-m);
+
+    }
+  }
+
+  .result {
+    background: var(--bg-h2);
+    padding: var(--gap-xl);
+    border-radius: var(--radius-m);
+    display: flex;
+
+    div.head {
+      font-size: larger;
+      font-weight: bold;
+    }
+  }
+
+  .result>div {
+    border-right: 1px solid var(--txt-base);
+    padding: 0 var(--gap-xl);
+    flex: 1;
+  }
+
+  .result>div:last-child {
+    border: 0px;
+    padding-right: 0px;
+  }
+
+  .next {
+    padding: var(--gap-xl);
+    background: var(--bg-h1);
+    border-radius: var(--radius-m);
+
+    .head {
+      font-size: large;
+      font-weight: bold;
+      padding-bottom: var(--gap-xl);
+    }
+  }
+
+  .detail {
+    padding: 10px;
+    background: var(--bg-g1);
+    border-radius: var(--radius-m);
+    font-size: small;
+    max-height: 24px;
+    overflow: hidden;
+    transition: all var(--transition-time) ease-in-out;
+
+    .row span.right {
+      transition: all var(--transition-time) ease-in-out;
+    }
+
+    .body {
+      padding-top: var(--gap-xl);
+    }
+  }
+
+  .row>.row_btn {
+    margin-left: auto;
+  }
+
+  .row input {
+    width: var(--width-s);
+  }
+
+  .btn {
+    display: flex;
+    align-items: center;
+    width: var(--width-m);
+    padding: var(--pad-m);
+    background: var(--btn-bg);
+    border-radius: var(--radius-m);
+    transition: all var(--transition-time);
+    cursor: default;
+  }
+
+  .btn.swbtn {
+    justify-content: flex-end;
+    cursor: pointer;
+  }
+
+
+  .btn.swbtn:hover {
+    background: var(--btn-hovered);
+  }
+}
