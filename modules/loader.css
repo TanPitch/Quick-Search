@@ -13,32 +13,16 @@
 }
 
 .loader {
-  width: 50px;
-  aspect-ratio: 1;
-  display: grid;
-  border-radius: 50%;
-  background: var(--loader-ring);
-  background-repeat: no-repeat;
-  animation: l23 1s infinite steps(12);
+  width: 40px;
+  height: 40px;
+  --c:no-repeat linear-gradient(var(--bg-h2) 0 0);
+  background: var(--c),var(--c),var(--c),var(--c);
+  background-size: 21px 21px;
+  animation: l5 1.5s infinite cubic-bezier(0.3,1,0,1);
 }
-
-.loader::before,
-.loader::after {
-  content: "";
-  grid-area: 1/1;
-  border-radius: 50%;
-  background: inherit;
-  opacity: 0.915;
-  transform: rotate(30deg);
-}
-
-.loader::after {
-  opacity: 0.83;
-  transform: rotate(60deg);
-}
-
-@keyframes l23 {
-  100% {
-    transform: rotate(1turn)
-  }
+@keyframes l5 {
+ 0%   {background-position: 0    0,100% 0   ,100% 100%,0 100%}
+ 33%  {background-position: 0    0,100% 0   ,100% 100%,0 100%;width:60px;height: 60px}
+ 66%  {background-position: 100% 0,100% 100%,0    100%,0 0   ;width:60px;height: 60px}
+ 100% {background-position: 100% 0,100% 100%,0    100%,0 0   }
 }

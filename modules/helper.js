@@ -8,7 +8,7 @@ export function fixed_dom(box, target, offset = 0) {
     const targetHeight = targetDom.offsetHeight;
     placeholder.style.height = `${targetHeight}px`;
 
-    console.log(targetHeight, targetDom)
+    // console.log(targetHeight, targetDom)
 
     // update width with pad
     const parentStyles = getComputedStyle(parentDom);

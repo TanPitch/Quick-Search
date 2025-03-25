@@ -1,7 +1,8 @@
 // TODO: custom md code
 const renderer = {
-    link(href, title, text) {
-        if (href.match(/@drug-/g)) {
+    link(token) {
+        // drug code
+        if (token.href.match(/@drug-/g)) {
             const result = {};
             const el = href.split("-");
             el.forEach((element) => {
@@ -26,67 +27,74 @@ const renderer = {
                 }
             });
 
-            return `<span onclick="openCalculator(${result.dose}, '${result.dose_unit}', '${result.freq}', ${result.amount}, '${result.amount_unit}', '${result.dose_range}', '${result.dose_range_unit}', ${result.dose_max}, '${result.dose_max_unit}', '${result.freq_range}')" class="drug_dose">${text}</span>`;
+            return `<span onclick="openCalculator(${result.dose}, '${result.dose_unit}', '${result.freq}', ${result.amount}, '${result.amount_unit}', '${result.dose_range}', '${result.dose_range_unit}', ${result.dose_max}, '${result.dose_max_unit}', '${result.freq_range}')" class="drug_dose">${token.text}</span>`;
         }
 
-        switch (href) {
+        // img code
+        if (token.href.match(/@img-/g)) {
+            console.log(token);
+            const link = token.href.replace("@img-", "");
+            return `<img src="${link}" alt="${token.text}"/>`;
+        }
+
+        switch (token.href) {
             case "@find":
-                return `<span class="btn hover-text" onclick="textSearch(this)">${text}</span>`;
+                return `<span class="btn hover-text" onclick="textSearch(this)">${token.text}</span>`;
             case "@section":
-                return `<span class="btn hover-text" onclick="textSection(this)">${text}</span>`;
+                return `<span class="btn hover-text" onclick="textSection(this)">${token.text}</span>`;
 
             case "@text_grey":
-                return `<span class="text-grey">${text}</span>`;
+                return `<span class="text-grey">${token.text}</span>`;
             case "@text_brown":
-                return `<span class="text-brown">${text}</span>`;
+                return `<span class="text-brown">${token.text}</span>`;
             case "@text_orange":
-                return `<span class="text-orange">${text}</span>`;
+                return `<span class="text-orange">${token.text}</span>`;
             case "@text_yellow":
-                return `<span class="text-yellow">${text}</span>`;
+                return `<span class="text-yellow">${token.text}</span>`;
             case "@text_green":
-                return `<span class="text-green">${text}</span>`;
+                return `<span class="text-green">${token.text}</span>`;
             case "@text_blue":
-                return `<span class="text-blue">${text}</span>`;
+                return `<span class="text-blue">${token.text}</span>`;
             case "@text_purple":
-                return `<span class="text-purple">${text}</span>`;
+                return `<span class="text-purple">${token.text}</span>`;
             case "@text_pink":
-                return `<span class="text-pink">${text}</span>`;
+                return `<span class="text-pink">${token.text}</span>`;
             case "@text_red":
-                return `<span class="text-red">${text}</span>`;
+                return `<span class="text-red">${token.text}</span>`;
 
             case "@bg_grey":
-                return `<span class="bg-grey">${text}</span>`;
+                return `<span class="bg-grey">${token.text}</span>`;
             case "@bg_brown":
-                return `<span class="bg-brown">${text}</span>`;
+                return `<span class="bg-brown">${token.text}</span>`;
             case "@bg_orange":
-                return `<span class="bg-orange">${text}</span>`;
+                return `<span class="bg-orange">${token.text}</span>`;
             case "@bg_yellow":
-                return `<span class="bg-yellow">${text}</span>`;
+                return `<span class="bg-yellow">${token.text}</span>`;
             case "@bg_green":
-                return `<span class="bg-green">${text}</span>`;
+                return `<span class="bg-green">${token.text}</span>`;
             case "@bg_blue":
-                return `<span class="bg-blue">${text}</span>`;
+                return `<span class="bg-blue">${token.text}</span>`;
             case "@bg_purple":
-                return `<span class="bg-purple">${text}</span>`;
+                return `<span class="bg-purple">${token.text}</span>`;
             case "@bg_pink":
-                return `<span class="bg-pink">${text}</span>`;
+                return `<span class="bg-pink">${token.text}</span>`;
             case "@bg_red":
-                return `<span class="bg-red">${text}</span>`;
+                return `<span class="bg-red">${token.text}</span>`;
 
             case "@under":
-                return `<span class="text-under">${text}</span>`;
+                return `<span class="text-under">${token.text}</span>`;
 
             case "@br":
                 return `<br>`;
             case "@center":
-                return `<center>${text}</center>`;
+                return `<center>${token.text}</center>`;
             case "@li":
-                return `<li>${text}`;
+                return `<li>${token.text}`;
             case "@li_sub":
-                return `<ul>${text}</ul>`;
+                return `<ul>${token.text}</ul>`;
 
             default:
-                return `<a href="${href}">${text}</a>`;
+                return `<a href="${token.href}">${token.text}</a>`;
         }
     },
 };
@@ -208,24 +216,24 @@ function tableStyle() {
                 td.style.whiteSpace = "wrap";
             }
         });
-        var tableWidth = table.offsetWidth;
 
-        if (tableWidth > 300) {
-            table.style.width = "auto";
+        // style the table cells
+        tds.forEach((td) => {
+            td.style.maxWidth = "none";
+        });
+        table.style.width = "auto";
 
-            // Create a new div wrapper
-            var divWrapper = document.createElement("div");
-            divWrapper.style.width = "100%";
-            divWrapper.style.overflowX = "auto";
-            divWrapper.appendChild(table.cloneNode(true)); // Clone the table and append to the wrapper
-            table.parentNode.replaceChild(divWrapper, table); // Replace the original container with the wrapper
-        } else {
-            tds.forEach((td) => {
-                td.style.maxWidth = "none";
-            });
-            table.style.width = "auto";
-            table.style.overflowX = "hidden";
-        }
+        // style the large table
+        setTimeout(() => {
+            if (table.offsetWidth > window.innerWidth) {
+                // Create a new div wrapper
+                var divWrapper = document.createElement("div");
+                divWrapper.style.width = "100%";
+                divWrapper.style.overflowX = "auto";
+                divWrapper.appendChild(table.cloneNode(true)); // Clone the table and append to the wrapper
+                table.parentNode.replaceChild(divWrapper, table); // Replace the original container with the wrapper
+            }
+        }, 10);
     });
 }
 
